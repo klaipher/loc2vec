@@ -17,6 +17,8 @@ dependencies = [
     "requests>=2.31.0",
     "folium>=0.15.0",
     "pillow>=10.0.0",
+    "plotly>=6.0.1"
+    "dash>=3.0.4"
 ]
 
 [dependency-groups]
