@@ -260,3 +260,7 @@ output/
 output_osm/
 prepared_osm_data/
 visualizations_osm/
+12_layer_tiles/
+runs/
+checkpoints/
+embedding_cache/
