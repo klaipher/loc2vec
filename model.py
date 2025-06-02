@@ -2,6 +2,110 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from typing import Tuple, Dict
+import torchvision.models as models
+from torchvision.models import ResNet18_Weights
+
+
+class ResNet18Encoder(nn.Module):
+    """
+    ResNet18-based encoder for location tiles with pre-trained weights.
+
+    Uses a pre-trained ResNet18 backbone and adapts it for 12-channel input
+    and the desired embedding dimension.
+    """
+
+    def __init__(
+        self,
+        input_channels: int = 12,
+        embedding_dim: int = 128,
+        dropout_rate: float = 0.5,
+        pretrained: bool = True,
+    ):
+        """
+        Args:
+            input_channels: Number of input channels (12 for the map layers)
+            embedding_dim: Dimension of the output embedding
+            dropout_rate: Dropout rate for regularization
+            pretrained: Whether to use pre-trained weights
+        """
+        super(ResNet18Encoder, self).__init__()
+
+        self.embedding_dim = embedding_dim
+
+        # Load ResNet18 with updated weights parameter
+        weights = ResNet18_Weights.DEFAULT if pretrained else None
+        self.backbone = models.resnet18(weights=weights)
+
+        # Modify first conv layer to handle 12 channels instead of 3
+        original_conv1 = self.backbone.conv1
+        self.backbone.conv1 = nn.Conv2d(
+            input_channels, 64, kernel_size=7, stride=2, padding=3, bias=False
+        )
+
+        if pretrained:
+            # Initialize new conv layer weights intelligently
+            with torch.no_grad():
+                if input_channels >= 3:
+                    # For the first 3 channels, use pre-trained weights
+                    self.backbone.conv1.weight[:, :3, :, :] = (
+                        original_conv1.weight.clone()
+                    )
+
+                    # For additional channels, initialize with mean of RGB channels
+                    if input_channels > 3:
+                        mean_weights = original_conv1.weight.mean(dim=1, keepdim=True)
+                        for i in range(3, input_channels):
+                            self.backbone.conv1.weight[:, i : i + 1, :, :] = (
+                                mean_weights.clone()
+                            )
+                else:
+                    # For fewer than 3 channels, use mean or subset of pre-trained weights
+                    if input_channels == 1:
+                        # Use mean of RGB channels for single channel
+                        mean_weights = original_conv1.weight.mean(dim=1, keepdim=True)
+                        self.backbone.conv1.weight[:, 0:1, :, :] = mean_weights.clone()
+                    elif input_channels == 2:
+                        # Use first two channels of pre-trained weights
+                        self.backbone.conv1.weight[:, :2, :, :] = original_conv1.weight[
+                            :, :2, :, :
+                        ].clone()
+
+        # Remove the final classification layer
+        self.backbone.fc = nn.Identity()
+
+        # Add custom head for embedding
+        self.embedding_head = nn.Sequential(
+            nn.Linear(512, 512),  # ResNet18 outputs 512 features
+            nn.BatchNorm1d(512),
+            nn.LeakyReLU(0.2),
+            nn.Dropout(dropout_rate),
+            nn.Linear(512, 256),
+            nn.BatchNorm1d(256),
+            nn.LeakyReLU(0.2),
+            nn.Dropout(dropout_rate),
+            nn.Linear(256, embedding_dim),
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Forward pass through the encoder.
+
+        Args:
+            x: Input tensor of shape (batch_size, 12, H, W)
+
+        Returns:
+            Embedding tensor of shape (batch_size, embedding_dim)
+        """
+        # Pass through ResNet18 backbone
+        x = self.backbone(x)
+
+        # Pass through embedding head
+        x = self.embedding_head(x)
+
+        # L2 normalize the embeddings for better triplet loss performance
+        x = F.normalize(x, p=2, dim=1)
+
+        return x
 
 
 class Loc2VecEncoder(nn.Module):
@@ -193,6 +297,8 @@ class Loc2VecModel(nn.Module):
         margin: float = 0.2,
         loss_type: str = "softpn",
         dropout_rate: float = 0.5,
+        encoder_type: str = "cnn",
+        pretrained: bool = True,
     ):
         """
         Args:
@@ -201,20 +307,35 @@ class Loc2VecModel(nn.Module):
             margin: Triplet loss margin
             loss_type: Type of triplet loss ('triplet' or 'softpn')
             dropout_rate: Dropout rate
+            encoder_type: Type of encoder ('cnn' or 'resnet18')
+            pretrained: Whether to use pre-trained weights (only for resnet18)
         """
         super(Loc2VecModel, self).__init__()
 
-        self.encoder = Loc2VecEncoder(
-            input_channels=input_channels,
-            embedding_dim=embedding_dim,
-            dropout_rate=dropout_rate,
-        )
+        if encoder_type == "resnet18":
+            self.encoder = ResNet18Encoder(
+                input_channels=input_channels,
+                embedding_dim=embedding_dim,
+                dropout_rate=dropout_rate,
+                pretrained=pretrained,
+            )
+        elif encoder_type == "cnn":
+            self.encoder = Loc2VecEncoder(
+                input_channels=input_channels,
+                embedding_dim=embedding_dim,
+                dropout_rate=dropout_rate,
+            )
+        else:
+            raise ValueError(
+                f"Unknown encoder type: {encoder_type}. Choose 'cnn' or 'resnet18'"
+            )
 
         self.triplet_loss = TripletLoss(
             margin=margin, loss_type=loss_type, hard_mining=True
         )
 
         self.embedding_dim = embedding_dim
+        self.encoder_type = encoder_type
 
     def forward(
         self, anchor: torch.Tensor, positive: torch.Tensor, negative: torch.Tensor
@@ -257,52 +378,90 @@ class Loc2VecModel(nn.Module):
 
 
 def create_model(
+    input_channels: int = 12,
     embedding_dim: int = 128,
     margin: float = 0.2,
     loss_type: str = "softpn",
     dropout_rate: float = 0.5,
+    encoder_type: str = "cnn",
+    pretrained: bool = True,
 ) -> Loc2VecModel:
     """
     Create a loc2vec model with specified parameters.
 
     Args:
+        input_channels: Number of input channels (depends on data loading mode)
         embedding_dim: Dimension of location embeddings
         margin: Triplet loss margin
         loss_type: Type of triplet loss
         dropout_rate: Dropout rate for regularization
+        encoder_type: Type of encoder ('cnn' or 'resnet18')
+        pretrained: Whether to use pre-trained weights (only for resnet18)
 
     Returns:
         Initialized Loc2VecModel
     """
     model = Loc2VecModel(
-        input_channels=12,
+        input_channels=input_channels,
         embedding_dim=embedding_dim,
         margin=margin,
         loss_type=loss_type,
         dropout_rate=dropout_rate,
+        encoder_type=encoder_type,
+        pretrained=pretrained,
     )
 
-    # Initialize weights
-    def init_weights(m):
-        if isinstance(m, nn.Conv2d) or isinstance(m, nn.Linear):
-            nn.init.kaiming_normal_(m.weight, mode="fan_out", nonlinearity="leaky_relu")
-            if m.bias is not None:
-                nn.init.constant_(m.bias, 0)
-        elif isinstance(m, nn.BatchNorm2d) or isinstance(m, nn.BatchNorm1d):
-            nn.init.constant_(m.weight, 1)
-            nn.init.constant_(m.bias, 0)
+    # Initialize weights for custom CNN encoder
+    if encoder_type == "cnn":
 
-    model.apply(init_weights)
+        def init_weights(m):
+            if isinstance(m, nn.Conv2d) or isinstance(m, nn.Linear):
+                nn.init.kaiming_normal_(
+                    m.weight, mode="fan_out", nonlinearity="leaky_relu"
+                )
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
+            elif isinstance(m, nn.BatchNorm2d) or isinstance(m, nn.BatchNorm1d):
+                nn.init.constant_(m.weight, 1)
+                nn.init.constant_(m.bias, 0)
+
+        model.apply(init_weights)
+    elif encoder_type == "resnet18":
+        # Only initialize the embedding head for ResNet18 (backbone is pre-trained)
+        def init_embedding_head(m):
+            if isinstance(m, nn.Linear):
+                nn.init.kaiming_normal_(
+                    m.weight, mode="fan_out", nonlinearity="leaky_relu"
+                )
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
+            elif isinstance(m, nn.BatchNorm1d):
+                nn.init.constant_(m.weight, 1)
+                nn.init.constant_(m.bias, 0)
+
+        model.encoder.embedding_head.apply(init_embedding_head)
 
     return model
 
 
 if __name__ == "__main__":
-    # Test the model
+    # Test both encoder types
     device = torch.device("cuda" if torch.cuda.is_available() else "mps")
     print(f"Using device: {device}")
 
-    model = create_model(embedding_dim=128).to(device)
+    # Test CNN encoder
+    print("\n=== Testing CNN Encoder ===")
+    model_cnn = create_model(embedding_dim=128, encoder_type="cnn").to(device)
+    cnn_params = sum(p.numel() for p in model_cnn.parameters())
+    print(f"CNN Model parameters: {cnn_params:,}")
+
+    # Test ResNet18 encoder
+    print("\n=== Testing ResNet18 Encoder ===")
+    model_resnet = create_model(
+        embedding_dim=128, encoder_type="resnet18", pretrained=True
+    ).to(device)
+    resnet_params = sum(p.numel() for p in model_resnet.parameters())
+    print(f"ResNet18 Model parameters: {resnet_params:,}")
 
     # Create dummy data
     batch_size = 4
@@ -310,16 +469,32 @@ if __name__ == "__main__":
     positive = torch.randn(batch_size, 12, 256, 256).to(device)
     negative = torch.randn(batch_size, 12, 256, 256).to(device)
 
-    print("Testing model forward pass...")
-    anchor_emb, pos_emb, neg_emb, loss, metrics = model(anchor, positive, negative)
+    # Test CNN model
+    print("\nTesting CNN model forward pass...")
+    anchor_emb, pos_emb, neg_emb, loss, metrics = model_cnn(anchor, positive, negative)
+    print(f"CNN - Anchor embedding shape: {anchor_emb.shape}")
+    print(f"CNN - Loss: {loss.item():.4f}")
+    print(f"CNN - Metrics: {metrics}")
 
-    print(f"Anchor embedding shape: {anchor_emb.shape}")
-    print(f"Loss: {loss.item():.4f}")
-    print(f"Metrics: {metrics}")
+    # Test ResNet18 model
+    print("\nTesting ResNet18 model forward pass...")
+    anchor_emb, pos_emb, neg_emb, loss, metrics = model_resnet(
+        anchor, positive, negative
+    )
+    print(f"ResNet18 - Anchor embedding shape: {anchor_emb.shape}")
+    print(f"ResNet18 - Loss: {loss.item():.4f}")
+    print(f"ResNet18 - Metrics: {metrics}")
 
     # Test encoding
     print("\nTesting encoding...")
-    embeddings = model.encode(anchor)
-    print(f"Embeddings shape: {embeddings.shape}")
+    embeddings_cnn = model_cnn.encode(anchor)
+    embeddings_resnet = model_resnet.encode(anchor)
+    print(f"CNN Embeddings shape: {embeddings_cnn.shape}")
+    print(f"ResNet18 Embeddings shape: {embeddings_resnet.shape}")
 
-    print("\nModel created successfully!")
+    print("\nParameter comparison:")
+    print(f"CNN Model: {cnn_params:,} parameters")
+    print(f"ResNet18 Model: {resnet_params:,} parameters")
+    print(f"Difference: {resnet_params - cnn_params:,} parameters")
+
+    print("\nBoth models created successfully!")

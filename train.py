@@ -366,22 +366,42 @@ def main():
         choices=["triplet", "softpn"],
         help="Type of triplet loss",
     )
+    parser.add_argument(
+        "--encoder_type",
+        type=str,
+        default="cnn",
+        choices=["cnn", "resnet18"],
+        help="Type of encoder (cnn: custom CNN, resnet18: ResNet18 with pre-trained weights)",
+    )
+    parser.add_argument(
+        "--pretrained",
+        action="store_true",
+        default=True,
+        help="Use pre-trained weights for ResNet18 (only applicable when --encoder_type=resnet18)",
+    )
+    parser.add_argument(
+        "--no_pretrained",
+        action="store_false",
+        dest="pretrained",
+        help="Don't use pre-trained weights for ResNet18",
+    )
+    parser.add_argument(
+        "--mode",
+        type=str,
+        default="all_layers",
+        choices=["all_layers", "full_only"],
+        help="Data loading mode - 'all_layers' (all individual layers + full) or 'full_only' (just full layer)",
+    )
 
     args = parser.parse_args()
 
-    # Create model
-    model = create_model(
-        embedding_dim=args.embedding_dim,
-        margin=args.margin,
-        loss_type=args.loss_type,
-        dropout_rate=args.dropout,
-    )
+    # Validate arguments
+    if args.encoder_type != "resnet18" and not args.pretrained:
+        print(
+            "Warning: --pretrained flag is only applicable with --encoder_type=resnet18"
+        )
 
-    print(
-        f"Model created with {sum(p.numel() for p in model.parameters()):,} parameters"
-    )
-
-    # Create data loaders
+    # Create data loaders first to get the correct number of input channels
     print("Creating data loaders...")
     train_loader = create_data_loader(
         batch_size=args.batch_size,
@@ -390,7 +410,33 @@ def main():
         positive_radius=args.pos_radius,
         negative_radius=args.neg_radius,
         max_samples_per_epoch=args.max_samples,
+        mode=args.mode,
     )
+
+    # Get the number of input channels from the dataset
+    input_channels = train_loader.dataset.input_channels
+    print(f"Mode: {args.mode}")
+    print(f"Input channels: {input_channels}")
+
+    # Create model with the correct number of input channels
+    model = create_model(
+        input_channels=input_channels,
+        embedding_dim=args.embedding_dim,
+        margin=args.margin,
+        loss_type=args.loss_type,
+        dropout_rate=args.dropout,
+        encoder_type=args.encoder_type,
+        pretrained=args.pretrained,
+    )
+
+    total_params = sum(p.numel() for p in model.parameters())
+    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+    print(f"Model created with encoder type: {args.encoder_type}")
+    if args.encoder_type == "resnet18":
+        print(f"Pre-trained weights: {'Yes' if args.pretrained else 'No'}")
+    print(f"Total parameters: {total_params:,}")
+    print(f"Trainable parameters: {trainable_params:,}")
 
     # Create trainer
     trainer = Loc2VecTrainer(
