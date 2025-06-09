@@ -5,26 +5,17 @@ description = "Project for ML"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "geopandas>=1.0.1",
-    "matplotlib>=3.10.1",
-    "numpy>=2.2.3",
-    "opencv-python>=4.11.0.86",
-    "pandas>=2.2.3",
-    "pillow>=11.1.0",
-    "plotly>=6.1.2",
-    "plotly-express>=0.4.1",
-    "rasterio>=1.4.3",
+    "ipywidgets>=8.1.7",
+    "jupyter>=1.1.1",
+    "matplotlib>=3.10.3",
+    "notebook>=7.4.3",
+    "pandas>=2.3.0",
+    "psutil>=7.0.0",
     "scikit-learn>=1.6.1",
-    "seaborn>=0.13.2",
-    "shapely>=2.0.7",
-    "streamlit>=1.45.1",
     "tensorboard>=2.19.0",
-    "torch==2.6.0",
-    "torchvision==0.21.0",
+    "torch>=2.6.0",
+    "torchvision>=0.21.0",
     "tqdm>=4.67.1",
-    "umap-learn>=0.5.7",
-    "annoy>=1.17.0",
-    "watchdog>=6.0.0",
 ]
 
 [dependency-groups]
