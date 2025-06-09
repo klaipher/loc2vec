@@ -1,0 +1,13 @@
+services:
+  tile-server:
+    image: overv/openstreetmap-tile-server:2.3.0
+    container_name: tile-server-landcover
+    volumes:
+      - ./data:/var/lib/postgresql/14/main
+      - ./ukraine-latest.osm.pbf:/data/region.osm.pbf
+    ports:
+      - "8081:80"
+      - "5432:5432"
+    environment:
+      - THREADS=8
+    command: run

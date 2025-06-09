@@ -260,3 +260,9 @@ output/
 output_osm/
 prepared_osm_data/
 visualizations_osm/
+
+full/
+tiles/full/
+docker/data
+
+*.pbf
