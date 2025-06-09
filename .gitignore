@@ -266,3 +266,5 @@ tiles/full/
 docker/data
 
 *.pbf
+
+logs/
