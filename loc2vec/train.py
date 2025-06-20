@@ -7,10 +7,10 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 from loc2vec.dataset import TilesDataset
-from loc2vec.model import SoftmaxTripletLoss, Loc2VecModel
+from loc2vec.model import Loc2VecModel
 
 
-def train(model, train_loader, optimizer, loss_fn, device):
+def train(model, train_loader, optimizer, loss_fn, device, scheduler=None):
     """
     Train the model for one epoch.
 
@@ -29,9 +29,9 @@ def train(model, train_loader, optimizer, loss_fn, device):
 
     for batch in tqdm(train_loader, desc="Training", total=len(train_loader)):
         # Move data to the specified device
-        anchor = batch['anchor_image'].to(device)
-        positive = batch['pos_image'].to(device)
-        negative = batch['neg_image'].to(device)
+        anchor = batch["anchor_image"].to(device)
+        positive = batch["pos_image"].to(device)
+        negative = batch["neg_image"].to(device)
 
         # Forward pass
         anchor_out = model(anchor)
@@ -44,6 +44,7 @@ def train(model, train_loader, optimizer, loss_fn, device):
         # Backward pass and optimization
         optimizer.zero_grad()
         loss.backward()
+        # torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
         optimizer.step()
 
         total_loss += loss.item()
@@ -57,12 +58,20 @@ if __name__ == "__main__":
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
     # loss_fn = TripletLoc2Vec(embedding_dim=64, margin=0.3)
     loss_fn = nn.TripletMarginLoss(margin=0.3, p=2)
-    dataset = TilesDataset("../tiles/full", pos_radius=1, transform=T.Compose([
-        T.Resize((128, 128)),
-        T.ToTensor(),
-        T.Normalize([0.485, 0.456, 0.406],  # image normalization values for ImageNet
-                    [0.229, 0.224, 0.225])
-    ]))
+    dataset = TilesDataset(
+        "../tiles/full",
+        pos_radius=1,
+        transform=T.Compose(
+            [
+                T.Resize((128, 128)),
+                T.ToTensor(),
+                T.Normalize(
+                    [0.485, 0.456, 0.406],  # image normalization values for ImageNet
+                    [0.229, 0.224, 0.225],
+                ),
+            ]
+        ),
+    )
     train_loader = DataLoader(dataset, batch_size=64, shuffle=True, num_workers=4)
 
     sample = random.choice(dataset)
