@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from argparse import ArgumentParser
-import h5py
 import numpy as np
 from tqdm import tqdm
 from pathlib import Path
