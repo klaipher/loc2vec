@@ -4,9 +4,6 @@ from torch.utils.data import Dataset
 import pandas as pd
 from PIL import Image
 import torch
-import os
-
-
 class MemmapTilesDataset(Dataset):
     def __init__(
         self,
