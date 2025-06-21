@@ -1,0 +1,21 @@
+Best Models Summary for MobileNetV3-Small
+==================================================
+
+Best Adam Model:
+  Config: MobileNetV3-Small_Adam
+  Final Loss: 0.0672
+  Training Time: 311.37s
+  Memory Used: -7214.5MB
+  Parameters: 1.1M
+  Loss Std: 0.0401
+  All Losses: 0.2424, 0.1644, 0.1333, 0.1239, 0.1134, 0.1059, 0.1020, 0.0992, 0.0960, 0.0924, 0.0866, 0.0855, 0.0842, 0.0800, 0.0761, 0.0782, 0.0739, 0.0681, 0.0686, 0.0672
+------------------------------
+Best AdamW Model:
+  Config: MobileNetV3-Small_AdamW
+  Final Loss: 0.0656
+  Training Time: 312.48s
+  Memory Used: -6268.4MB
+  Parameters: 1.1M
+  Loss Std: 0.0443
+  All Losses: 0.2632, 0.1648, 0.1354, 0.1260, 0.1151, 0.1109, 0.1020, 0.0966, 0.0942, 0.0916, 0.0851, 0.0837, 0.0804, 0.0777, 0.0774, 0.0723, 0.0758, 0.0719, 0.0690, 0.0656
+------------------------------
