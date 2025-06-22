@@ -127,20 +127,20 @@ class MemmapTilesDataset(Dataset):
 
         return anchor_idx
 
-    def _select_negative_sample(self, x, y, zoom, anchor_idx):
-        """Memory-efficient negative sample selection."""
-        if zoom not in self.negative_index:
-            return anchor_idx
+    def _select_negative_sample(self, x, y, z, anchor_idx, max_trials: int = 10) -> int:
+        block = self.negative_index[z]
+        xs, ys, idxs = block["x"], block["y"], block["indices"]
 
-        neg_data = self.negative_index[zoom]
-        
-        x_dist = np.abs(neg_data['x'] - x)
-        y_dist = np.abs(neg_data['y'] - y)
-        
-        valid_mask = (x_dist > self.neg_radius_min) | (y_dist > self.neg_radius_min)
-        valid_indices = neg_data['indices'][valid_mask]
-        
-        if len(valid_indices) > 0:
-            return valid_indices[random.randint(0, len(valid_indices) - 1)]
-        
-        return anchor_idx
+        for _ in range(max_trials):
+            j = random.randrange(len(idxs))
+            if (
+                abs(xs[j] - x) > self.neg_radius_min
+                or abs(ys[j] - y) > self.neg_radius_min
+            ):
+                return int(idxs[j])
+
+        mask = (np.abs(xs - x) > self.neg_radius_min) | (
+            np.abs(ys - y) > self.neg_radius_min
+        )
+        valid = idxs[mask]
+        return int(random.choice(valid)) if len(valid) else anchor_idx
