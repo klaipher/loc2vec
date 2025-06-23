@@ -5,199 +5,146 @@
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
 \babel@aux{english}{}
-\citation{sentiance2018}
-\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}{section.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Motivation}{2}{subsection.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Project Objectives}{2}{subsection.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Kyiv as a Case Study}{2}{subsection.1.3}\protected@file@percent }
-\citation{zheng2010collaborative}
+\citation{sentiance2018loc2vec}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{5}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Problem Statement}{5}{subsection.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Project Objectives}{5}{subsection.1.2}\protected@file@percent }
 \citation{mikolov2013word2vec}
-\citation{yan2017place2vec}
-\citation{liu2017location2vec}
-\citation{zhang2018geography2vec}
-\citation{krumm2008predicting}
-\citation{lian2014geomf}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Contributions}{6}{subsection.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.4}Report Structure}{6}{subsection.1.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{6}{section.2}\protected@file@percent }
+\newlabel{sec:related_work}{{2}{6}{Related Work}{section.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Word Embeddings and Representation Learning}{6}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Spatial Representation Learning}{6}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.1}Traditional Approaches}{6}{subsubsection.2.2.1}\protected@file@percent }
+\citation{place2vec}
+\citation{geo2vec}
+\citation{spatial2vec}
+\citation{hal2019locvec}
 \citation{schroff2015facenet}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.4}Report Structure}{3}{subsection.1.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work and Background}{3}{section.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Location Embeddings and Spatial Representation Learning}{3}{subsection.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Venue Mapping and Point-of-Interest Prediction}{3}{subsection.2.2}\protected@file@percent }
-\citation{arandjelovic2016netvlad}
-\citation{hu2018deep}
 \citation{jean2016combining}
-\citation{tan2019efficientnet}
+\citation{zhou2018deeplearning}
+\citation{multimodal2020}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.2}Deep Learning for Spatial Data}{7}{subsubsection.2.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Triplet Loss and Metric Learning}{7}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Convolutional Neural Networks for Spatial Data}{7}{subsection.2.4}\protected@file@percent }
+\citation{imagenet}
 \citation{he2016resnet}
-\citation{howard2019mobilenetv3}
-\citation{haklay2008openstreetmap}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Triplet Loss and Metric Learning}{4}{subsection.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Transfer Learning in Computer Vision}{4}{subsection.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}OpenStreetMap and Geographical Data Processing}{4}{subsection.2.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}Gap Analysis}{5}{subsection.2.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3}Methodology}{5}{section.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Original Loc2Vec Methodology}{5}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}Geographic Data Rasterization}{5}{subsubsection.3.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.2}Triplet Network Architecture}{6}{subsubsection.3.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.3}Triplet Generation Strategy}{6}{subsubsection.3.1.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Our Adaptations for Kyiv City}{6}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Data Source and Processing}{6}{subsubsection.3.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Rasterization Pipeline}{7}{subsubsection.3.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.3}Embedding Architecture}{7}{subsubsection.3.2.3}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Base CNN Encoder Architecture}}{7}{algorithm.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Transfer Learning Methodology}{8}{subsection.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1}Architecture Selection}{8}{subsubsection.3.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2}Transfer Learning Strategy}{8}{subsubsection.3.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.3}Training Procedure}{8}{subsubsection.3.3.3}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Training Procedure}}{8}{algorithm.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Evaluation Methodology}{8}{subsection.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Embedding Quality Metrics}{9}{subsubsection.3.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2}Venue Mapping Evaluation}{9}{subsubsection.3.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.3}Computational Analysis}{9}{subsubsection.3.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4}Implementation Details}{9}{section.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Development Environment and Tools}{9}{subsection.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Data Acquisition and Preprocessing}{10}{subsection.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.1}OpenStreetMap Data Setup}{10}{subsubsection.4.2.1}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}{\ignorespaces OSM Data Download and Setup}}{10}{lstlisting.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.2}Feature Categorization and Channel Definition}{10}{subsubsection.4.2.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Geographic Feature Channels}}{11}{table.caption.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.3}Rasterization Implementation}{11}{subsubsection.4.2.3}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}{\ignorespaces Multi-channel Rasterization}}{11}{lstlisting.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Model Architecture Implementation}{12}{subsection.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Base CNN Encoder}{12}{subsubsection.4.3.1}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}{\ignorespaces Base CNN Encoder}}{12}{lstlisting.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}Transfer Learning Models}{13}{subsubsection.4.3.2}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}{\ignorespaces Transfer Learning Model Wrapper}}{13}{lstlisting.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Training Infrastructure}{14}{subsection.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Triplet Mining Strategy}{14}{subsubsection.4.4.1}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {5}{\ignorespaces Online Hard Triplet Mining}}{14}{lstlisting.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.2}Training Loop Implementation}{15}{subsubsection.4.4.2}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6}{\ignorespaces Training Loop with Progressive Unfreezing}}{15}{lstlisting.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Evaluation Framework}{15}{subsection.4.5}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {7}{\ignorespaces Evaluation Metrics Implementation}}{15}{lstlisting.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Computational Infrastructure}{16}{subsection.4.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}Experiments and Results}{17}{section.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Dataset Preparation}{17}{subsection.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.1}Data Collection Strategy}{17}{subsubsection.5.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.2}Dataset Splits}{17}{subsubsection.5.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Experimental Setup}{18}{subsection.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.1}Hyperparameter Configuration}{18}{subsubsection.5.2.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Hyperparameter Configuration}}{18}{table.caption.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.2}Training Procedure}{18}{subsubsection.5.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Base Model Results}{18}{subsection.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.1}Training Convergence}{18}{subsubsection.5.3.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Base Model Training Progress}}{18}{figure.caption.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.2}Embedding Quality Analysis}{19}{subsubsection.5.3.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Embedding Quality Metrics}}{19}{table.caption.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.3}Venue Mapping Performance}{19}{subsubsection.5.3.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Venue Mapping Results}}{19}{table.caption.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.4}Semantic Similarity Analysis}{19}{subsubsection.5.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Embedding Visualization}{19}{subsection.5.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.1}t-SNE Analysis}{20}{subsubsection.5.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.2}UMAP Visualization}{20}{subsubsection.5.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Ablation Studies}{20}{subsection.5.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.1}Channel Contribution Analysis}{20}{subsubsection.5.5.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Channel Ablation Results}}{20}{table.caption.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.2}Augmentation Strategy Impact}{21}{subsubsection.5.5.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Data Augmentation Impact}}{21}{table.caption.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.3}Loss Function Comparison}{21}{subsubsection.5.5.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Loss Function Comparison}}{21}{table.caption.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Computational Performance}{21}{subsection.5.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.1}Training Efficiency}{21}{subsubsection.5.6.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Training Performance Metrics}}{21}{table.caption.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.2}Inference Performance}{21}{subsubsection.5.6.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Inference Performance}}{21}{table.caption.11}\protected@file@percent }
 \citation{tan2019efficientnet}
-\citation{he2016resnet}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.7}Error Analysis}{22}{subsection.5.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.1}Common Failure Cases}{22}{subsubsection.5.7.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.2}Performance by Geographic Region}{22}{subsubsection.5.7.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Performance by Kyiv District}}{22}{table.caption.12}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Transfer Learning Analysis}{22}{section.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Transfer Learning Experimental Design}{22}{subsection.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.1.1}Architecture Selection Rationale}{22}{subsubsection.6.1.1}\protected@file@percent }
-\citation{howard2019mobilenetv3}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.1.2}Input Adaptation Strategy}{23}{subsubsection.6.1.2}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {8}{\ignorespaces Channel Expansion Strategy}}{23}{lstlisting.8}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {9}{\ignorespaces Learned Projection Strategy}}{23}{lstlisting.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Transfer Learning Results}{24}{subsection.6.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.1}Overall Performance Comparison}{24}{subsubsection.6.2.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Transfer Learning Architecture Comparison}}{24}{table.caption.13}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.2}Convergence Analysis}{24}{subsubsection.6.2.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Convergence Characteristics}}{24}{figure.caption.14}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.3}Detailed EfficientNet Analysis}{25}{subsubsection.6.2.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces EfficientNet Feature Analysis by Layer}}{25}{table.caption.15}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {13}{\ignorespaces Channel Importance for EfficientNet}}{25}{table.caption.16}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Computational Efficiency Analysis}{25}{subsection.6.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.1}Training Efficiency}{25}{subsubsection.6.3.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {14}{\ignorespaces Training Computational Requirements}}{25}{table.caption.17}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.2}Inference Performance}{25}{subsubsection.6.3.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {15}{\ignorespaces Inference Performance Comparison}}{25}{table.caption.18}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Fine-tuning Strategy Analysis}{26}{subsection.6.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.1}Progressive Unfreezing vs. Full Fine-tuning}{26}{subsubsection.6.4.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {16}{\ignorespaces Fine-tuning Strategy Comparison (EfficientNet-B0)}}{26}{table.caption.19}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.2}Learning Rate Sensitivity}{26}{subsubsection.6.4.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {17}{\ignorespaces Learning Rate Impact on Transfer Learning}}{26}{table.caption.20}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Geographic Generalization Analysis}{27}{subsection.6.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.1}Cross-District Performance}{27}{subsubsection.6.5.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {18}{\ignorespaces Cross-District Generalization (Train on Shevchenkivskyi, Test on Others)}}{27}{table.caption.21}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.2}Semantic Consistency Analysis}{27}{subsubsection.6.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.6}Error Analysis for Transfer Learning}{27}{subsection.6.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.6.1}Failure Case Analysis}{27}{subsubsection.6.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.6.2}Embedding Quality Comparison}{28}{subsubsection.6.6.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {19}{\ignorespaces Embedding Quality Metrics Comparison}}{28}{table.caption.22}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}Discussion}{28}{section.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Key Findings and Insights}{28}{subsection.7.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.1.1}Effectiveness of Location Embeddings for Urban Understanding}{28}{subsubsection.7.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {7.1.2}Transfer Learning Advantages}{28}{subsubsection.7.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion and Future Work}{29}{section.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Summary of Contributions}{29}{subsection.8.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.1.1}Primary Contributions}{29}{subsubsection.8.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {9}Individual Contributions}{29}{section.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Team Organization and Collaboration}{29}{subsection.9.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Individual Contributions}{30}{subsection.9.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {9.2.1}Student 1 - Data Infrastructure and Base Implementation}{30}{subsubsection.9.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {9.2.2}Student 2 - Transfer Learning and Model Architecture}{31}{subsubsection.9.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {9.2.3}Student 3 - Evaluation and Analysis}{32}{subsubsection.9.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.3}Collaborative Achievements}{32}{subsection.9.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.4}Learning Outcomes}{33}{subsection.9.4}\protected@file@percent }
-\bibstyle{plain}
+\citation{howard2017mobilenets}
+\citation{sentiance2018loc2vec}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Transfer Learning in Computer Vision}{8}{subsection.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}The Original Loc2Vec Approach}{8}{subsection.2.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.7}Gaps and Opportunities}{8}{subsection.2.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Data}{9}{section.3}\protected@file@percent }
+\newlabel{sec:data}{{3}{9}{Data}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Data Sources}{9}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}OpenStreetMap Data}{9}{subsubsection.3.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.2}Administrative Boundaries}{9}{subsubsection.3.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Geographic Coverage}{9}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Data Preprocessing Pipeline}{10}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.1}Geographic Information System Setup}{10}{subsubsection.3.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.3.2}Map Tile Generation}{10}{subsubsection.3.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Data Augmentation}{10}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Geometric Transformations}{11}{subsubsection.3.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.2}Channel-wise Augmentation}{11}{subsubsection.3.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Dataset Statistics}{11}{subsection.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Triplet Generation Strategy}{11}{subsection.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.1}Positive Pair Generation}{11}{subsubsection.3.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.2}Negative Pair Generation}{11}{subsubsection.3.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.6.3}Hard Negative Mining}{12}{subsubsection.3.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7}Data Quality and Challenges}{12}{subsection.3.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.7.1}Quality Assurance}{12}{subsubsection.3.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.7.2}Challenges Encountered}{12}{subsubsection.3.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Approach}{12}{section.4}\protected@file@percent }
+\newlabel{sec:approach}{{4}{12}{Approach}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}System Architecture Overview}{13}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Neural Network Architecture}{13}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.1}Base Encoder Design}{13}{subsubsection.4.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.2}Backbone Architectures}{13}{subsubsection.4.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Transfer Learning Strategy}{14}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Pre-training Adaptation}{14}{subsubsection.4.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Training Methodology}{14}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Triplet Loss Implementation}{14}{subsubsection.4.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.2}Training Configuration}{15}{subsubsection.4.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Data Loading and Augmentation}{15}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.1}Efficient Data Pipeline}{15}{subsubsection.4.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.5.2}Advanced Augmentation}{15}{subsubsection.4.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Evaluation Framework}{16}{subsection.4.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.1}Quantitative Metrics}{16}{subsubsection.4.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.2}Qualitative Analysis}{16}{subsubsection.4.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Implementation Details}{16}{subsection.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.1}Technology Stack}{16}{subsubsection.4.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.2}Computational Resources}{17}{subsubsection.4.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.3}Reproducibility}{17}{subsubsection.4.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Results}{17}{section.5}\protected@file@percent }
+\newlabel{sec:results}{{5}{17}{Results}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Model Performance Comparison}{17}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.1}Training Convergence}{17}{subsubsection.5.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.2}Quantitative Results}{18}{subsubsection.5.1.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Performance comparison of different architectures on Kyiv location embedding task}}{18}{table.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{tab:performance}{{1}{18}{Performance comparison of different architectures on Kyiv location embedding task}{table.caption.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.3}Transfer Learning Impact}{18}{subsubsection.5.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Embedding Quality Analysis}{18}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.1}Spatial Coherence}{18}{subsubsection.5.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.2}Semantic Clustering}{18}{subsubsection.5.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Qualitative Analysis}{19}{subsection.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.1}Visualization Results}{19}{subsubsection.5.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.2}Case Studies}{19}{subsubsection.5.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Ablation Studies}{19}{subsection.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.1}Channel Importance Analysis}{19}{subsubsection.5.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.2}Augmentation Impact}{20}{subsubsection.5.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Computational Efficiency Analysis}{20}{subsection.5.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.1}Training Efficiency}{20}{subsubsection.5.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.2}Inference Performance}{20}{subsubsection.5.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Error Analysis}{21}{subsection.5.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.1}Common Failure Cases}{21}{subsubsection.5.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.6.2}Model Limitations}{21}{subsubsection.5.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.7}Validation on Real-world Tasks}{21}{subsection.5.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.1}Venue Type Prediction}{21}{subsubsection.5.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.2}Similar Location Retrieval}{21}{subsubsection.5.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Further Steps}{22}{section.6}\protected@file@percent }
+\newlabel{sec:further_steps}{{6}{22}{Further Steps}{section.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Technical Improvements}{22}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.1.1}Architecture Enhancements}{22}{subsubsection.6.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.1.2}Training Methodology Advances}{22}{subsubsection.6.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Data Enhancement}{22}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.1}Multi-Modal Integration}{22}{subsubsection.6.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.2.2}Data Quality Improvements}{23}{subsubsection.6.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Evaluation and Validation}{23}{subsection.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.1}Comprehensive Benchmarking}{23}{subsubsection.6.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.3.2}Domain-Specific Applications}{23}{subsubsection.6.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Scalability and Deployment}{23}{subsection.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.1}System Optimization}{23}{subsubsection.6.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.2}Operational Considerations}{23}{subsubsection.6.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Broader Applications}{24}{subsection.6.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.1}Smart City Integration}{24}{subsubsection.6.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.5.2}Commercial Applications}{24}{subsubsection.6.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.6}Research Directions}{24}{subsection.6.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.6.1}Theoretical Foundations}{24}{subsubsection.6.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.6.2}Interdisciplinary Collaboration}{24}{subsubsection.6.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.7}Addressing Current Limitations}{25}{subsection.6.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.7.1}Technical Limitations}{25}{subsubsection.6.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.7.2}Methodological Improvements}{25}{subsubsection.6.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.8}Long-term Vision}{25}{subsection.6.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.8.1}Global Spatial Intelligence}{25}{subsubsection.6.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.8.2}Societal Impact}{25}{subsubsection.6.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.9}Immediate Next Steps}{26}{subsection.6.9}\protected@file@percent }
+\bibstyle{unsrtnat}
 \bibdata{references}
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.5}Reflection on Team Collaboration}{34}{subsection.9.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {A}Code Snippets}{34}{appendix.A}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}Data Processing Pipeline}{34}{subsection.A.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {A.1.1}OSM Data Extraction and Processing}{34}{subsubsection.A.1.1}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {10}{\ignorespaces Complete OSM Data Processing Pipeline}}{34}{lstlisting.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {A.1.2}Multi-channel Rasterization Implementation}{36}{subsubsection.A.1.2}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {11}{\ignorespaces Comprehensive Rasterization System}}{36}{lstlisting.11}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Model Architecture Implementations}{40}{subsection.A.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {A.2.1}Enhanced Base CNN with Attention}{40}{subsubsection.A.2.1}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {12}{\ignorespaces Enhanced Base CNN Architecture}}{40}{lstlisting.12}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.3}Training and Evaluation Utilities}{42}{subsection.A.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {A.3.1}Advanced Triplet Mining and Loss}{42}{subsubsection.A.3.1}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {13}{\ignorespaces Advanced Triplet Mining Implementation}}{42}{lstlisting.13}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.4}Comprehensive Evaluation Framework}{45}{subsection.A.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {A.4.1}Advanced Metrics and Visualization}{45}{subsubsection.A.4.1}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {14}{\ignorespaces Comprehensive Evaluation Implementation}}{45}{lstlisting.14}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {B}Additional Results}{48}{appendix.B}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.1}Detailed Performance Metrics}{48}{subsection.B.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {B.1.1}Architecture Comparison Across All Metrics}{48}{subsubsection.B.1.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {20}{\ignorespaces Comprehensive Architecture Performance Comparison}}{48}{table.caption.23}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {B.1.2}Cross-District Performance Analysis}{49}{subsubsection.B.1.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {21}{\ignorespaces Detailed Cross-District Generalization Results}}{49}{table.caption.24}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.2}Ablation Study Results}{49}{subsection.B.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {B.2.1}Component Contribution Analysis}{49}{subsubsection.B.2.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {22}{\ignorespaces Detailed Ablation Study Results}}{49}{table.caption.25}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {B.2.2}Hyperparameter Sensitivity Analysis}{50}{subsubsection.B.2.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {23}{\ignorespaces Hyperparameter Impact on Performance (EfficientNet)}}{50}{table.caption.26}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.3}Error Analysis and Failure Cases}{50}{subsection.B.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {B.3.1}Failure Case Analysis by Category}{50}{subsubsection.B.3.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {24}{\ignorespaces Error Analysis by Venue Category}}{50}{table.caption.27}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {B.3.2}Geographic Error Patterns}{51}{subsubsection.B.3.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {25}{\ignorespaces Error Patterns by Geographic Characteristics}}{51}{table.caption.28}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.4}Computational Performance Details}{51}{subsection.B.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {B.4.1}Training Performance Analysis}{51}{subsubsection.B.4.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {26}{\ignorespaces Detailed Training Performance Metrics}}{51}{table.caption.29}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {B.4.2}Mobile Deployment Analysis}{51}{subsubsection.B.4.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {27}{\ignorespaces Mobile Deployment Performance Comparison}}{51}{table.caption.30}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.5}Additional Visualizations}{52}{subsection.B.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {B.5.1}Embedding Space Analysis}{52}{subsubsection.B.5.1}\protected@file@percent }
-\gdef \@abspage@last{52}
+\bibcite{sentiance2018loc2vec}{{1}{2018}{{Team}}{{}}}
+\bibcite{mikolov2013word2vec}{{2}{2013}{{Mikolov et~al.}}{{Mikolov, Chen, Corrado, and Dean}}}
+\bibcite{place2vec}{{3}{2016}{{Yan et~al.}}{{Yan, Janowicz, Mai, and Gao}}}
+\bibcite{geo2vec}{{4}{2016}{{Grover and Leskovec}}{{}}}
+\bibcite{spatial2vec}{{5}{2017}{{Liu et~al.}}{{Liu, Liu, Yuan, Duan, Fu, Xiong, Xu, and Wu}}}
+\bibcite{hal2019locvec}{{6}{2019}{{Hal}}{{}}}
+\bibcite{schroff2015facenet}{{7}{2015}{{Schroff et~al.}}{{Schroff, Kalenichenko, and Philbin}}}
+\bibcite{jean2016combining}{{8}{2016}{{Jean et~al.}}{{Jean, Burke, Xie, Davis, Lobell, and Ermon}}}
+\bibcite{zhou2018deeplearning}{{9}{2018}{{Zhou et~al.}}{{Zhou, Liu, Oliva, and Torralba}}}
+\bibcite{multimodal2020}{{10}{2020}{{Zhang et~al.}}{{Zhang, Sargent, Pan, Li, Gardiner, Hare, and Atkinson}}}
+\bibcite{imagenet}{{11}{2009}{{Deng et~al.}}{{Deng, Dong, Socher, Li, Li, and Fei-Fei}}}
+\bibcite{he2016resnet}{{12}{2016}{{He et~al.}}{{He, Zhang, Ren, and Sun}}}
+\bibcite{tan2019efficientnet}{{13}{2019}{{Tan and Le}}{{}}}
+\bibcite{howard2017mobilenets}{{14}{2017}{{Howard et~al.}}{{Howard, Zhu, Chen, Kalenichenko, Wang, Weyand, Andreetto, and Adam}}}
+\gdef \@abspage@last{27}

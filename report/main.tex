@@ -1,120 +1,82 @@
 \documentclass[12pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
-\usepackage{geometry}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{hyperref}
-\usepackage{cite}
-\usepackage{url}
+\usepackage{geometry}
 \usepackage{booktabs}
-\usepackage{algorithm}
-\usepackage{algorithmic}
-\usepackage{subfigure}
 \usepackage{caption}
-\usepackage{listings}
-\usepackage{xcolor}
+\usepackage{subcaption}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage[numbers,sort&compress]{natbib}
 
-% Page layout
-\geometry{margin=1in}
+% Page geometry
+\geometry{margin=2.5cm}
 
-% Code listing style
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+% Header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Loc2Vec for Kyiv City}
+\fancyhead[R]{UCU Machine Learning Project}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14.5pt}
 
-\lstdefinestyle{mystyle}{
-    backgroundcolor=\color{backcolour},
-    commentstyle=\color{codegreen},
-    keywordstyle=\color{magenta},
-    numberstyle=\tiny\color{codegray},
-    stringstyle=\color{codepurple},
-    basicstyle=\ttfamily\footnotesize,
-    breakatwhitespace=false,
-    breaklines=true,
-    captionpos=b,
-    keepspaces=true,
-    numbers=left,
-    numbersep=5pt,
-    showspaces=false,
-    showstringspaces=false,
-    showtabs=false,
-    tabsize=2
+% Title formatting
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+
+% Hyperref setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+    citecolor=blue
 }
 
-\lstset{style=mystyle}
-
-% Title page information
-\title{\textbf{Loc2Vec: Learning Location Embeddings with Triplet-Loss Networks}\\
-\large Implementation and Transfer Learning Analysis for Kyiv City}
+\title{
+    \textbf{Location Embeddings with Triplet-Loss Networks: \\
+    A Loc2Vec Implementation for Kyiv City}
+}
 
 \author{
-    Student 1\\
-    \texttt{email1@ucu.edu.ua}
-    \and
-    Student 2\\
-    \texttt{email2@ucu.edu.ua}
-    \and
-    Student 3\\
-    \texttt{email3@ucu.edu.ua}
+    \textit{Machine Learning Project Report} \\
+    \textit{Ukrainian Catholic University} \\
+    \vspace{0.5cm}
+    \textit{Team Members:} \\
+    Dmytro Miskevych, Stanislav Pavliuk, Bohdan Dhzus \\
+    \vspace{0.3cm}
+    \textit{Course:} Machine Learning \\
+    \textit{Academic Year:} 2024-2025
 }
 
-\date{
-    Machine Learning Course\\
-    Ukrainian Catholic University\\
-    \today
-}
+\date{\today}
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-\input{sections/abstract}
+This report presents our implementation of the Loc2Vec methodology for learning location embeddings using triplet-loss networks, specifically applied to Kyiv city. Based on the original paper by Sentiance, we developed a system that transforms geographic locations into meaningful vector representations by leveraging OpenStreetMap data and convolutional neural networks. Our approach incorporates transfer learning techniques using pre-trained models including EfficientNet, ResNet, and MobileNetV3 to improve embedding quality and training efficiency. The project demonstrates the effectiveness of spatial representation learning for understanding geographic semantics and relationships within urban environments, with potential applications in venue mapping, location recommendation, and urban planning.
 \end{abstract}
 
 \tableofcontents
 \newpage
 
-\section{Introduction}
 \input{sections/introduction}
-
-\section{Related Work and Background}
 \input{sections/related_work}
+\input{sections/data}
+\input{sections/approach}
+\input{sections/results}
+\input{sections/further_steps}
 
-\section{Methodology}
-\input{sections/methodology}
-
-\section{Implementation Details}
-\input{sections/implementation}
-
-\section{Experiments and Results}
-\input{sections/experiments}
-
-\section{Transfer Learning Analysis}
-\input{sections/transfer_learning}
-
-\section{Discussion}
-\input{sections/discussion}
-
-\section{Conclusion and Future Work}
-\input{sections/conclusion}
-
-\section{Individual Contributions}
-\input{sections/contributions}
-
-\bibliographystyle{plain}
+\newpage
+\bibliographystyle{unsrtnat}
 \bibliography{references}
-
-\appendix
-\section{Code Snippets}
-\input{sections/appendix_code}
-
-\section{Additional Results}
-\input{sections/appendix_results}
 
 \end{document}

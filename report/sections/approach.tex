@@ -1,0 +1,216 @@
+\section{Approach}
+\label{sec:approach}
+
+This section details our implementation methodology, architectural design decisions, and experimental setup for adapting the Loc2Vec approach to Kyiv city with modern deep learning techniques.
+
+\subsection{System Architecture Overview}
+
+We designed our implementation with a modular architecture that would be flexible and easy to extend. The core of our system consists of several key components that work together. Our data pipeline handles all the OSM data processing, generates map tiles, and mines triplets for training. The model architecture is built around CNN encoders, where we can swap in different backbone architectures like EfficientNet, ResNet, or MobileNetV3.
+
+For training, we built a framework around triplet loss optimization with some advanced techniques we'll describe later. We also created a comprehensive evaluation system to measure how good our embeddings actually are, and developed visualization tools that let us interactively explore and analyze the learned embeddings - this turned out to be really helpful for understanding what our model was learning.
+
+\subsection{Neural Network Architecture}
+
+\subsubsection{Base Encoder Design}
+
+Our encoder architecture transforms 12-channel map tiles into dense vector representations. The base architecture follows these principles:
+
+\textbf{Input Processing:} Each 12-channel tile (256×256×12) undergoes initial processing to normalize channel intensities and handle missing data.
+
+\textbf{Feature Extraction:} Convolutional layers extract hierarchical features from local patterns to global spatial structures.
+
+\textbf{Embedding Generation:} A final dense layer produces fixed-size embeddings (typically 128 or 256 dimensions) that serve as location representations.
+
+\subsubsection{Backbone Architectures}
+
+We decided to experiment with three different modern CNN architectures as our encoder backbone, each with its own strengths.
+
+\textbf{EfficientNet-B0} was our first choice because it's known for providing an excellent balance between accuracy and efficiency through something called compound scaling. To make it work with our 12-channel map tiles (instead of the usual 3-channel RGB images), we had to modify the first convolutional layer, remove the classification head that was designed for ImageNet, and add our own global average pooling followed by a dense layer to generate embeddings.
+
+\textbf{ResNet-18 and ResNet-34} were natural candidates because they're proven architectures with residual connections that make training deep networks much easier. We made similar modifications - adapting the input layer for our 12 channels, replacing the final fully connected layer with our embedding layer, and tweaking some batch normalization settings to work better with spatial data.
+
+\textbf{MobileNetV3-Small} was interesting because it's designed to be really efficient, which could be useful if we wanted to deploy our model on mobile devices or in resource-constrained environments. We made the same basic modifications but also focused on optimizations that would keep inference fast while maintaining good accuracy.
+
+\subsection{Transfer Learning Strategy}
+
+\subsubsection{Pre-training Adaptation}
+
+Since our input differs significantly from ImageNet (12 channels vs. 3 RGB channels), we developed several strategies for leveraging pre-trained weights:
+
+\textbf{Channel Initialization:} We initialized the first convolutional layer weights by:
+\begin{itemize}
+    \item Replicating RGB weights across relevant channels (e.g., road networks, buildings)
+    \item Random initialization for channels without clear RGB analogies (e.g., administrative boundaries)
+    \item Weighted combinations for channels representing mixed features
+\end{itemize}
+
+\textbf{Progressive Unfreezing:} We employed a progressive training strategy:
+\begin{enumerate}
+    \item Stage 1: Freeze backbone, train only the embedding layer
+    \item Stage 2: Unfreeze final layers, fine-tune with reduced learning rate
+    \item Stage 3: Full network fine-tuning with careful learning rate scheduling
+\end{enumerate}
+
+\textbf{Domain Adaptation:} To bridge the gap between natural images and map data:
+\begin{itemize}
+    \item Applied specialized data augmentation techniques
+    \item Used domain-specific normalization strategies
+    \item Implemented gradual adaptation through curriculum learning
+\end{itemize}
+
+\subsection{Training Methodology}
+
+\subsubsection{Triplet Loss Implementation}
+
+We implemented an enhanced version of triplet loss with several improvements:
+
+\textbf{Loss Function:}
+\begin{equation}
+L_{triplet} = \max(0, ||f(a) - f(p)||_2^2 - ||f(a) - f(n)||_2^2 + \alpha)
+\end{equation}
+
+where $\alpha$ is the margin parameter, set to 0.2 after hyperparameter tuning.
+
+\textbf{Batch Construction:} Each training batch contains carefully constructed triplets:
+\begin{itemize}
+    \item Batch size of 32 triplets (96 samples total)
+    \item Online hard negative mining within each batch
+    \item Balanced sampling across different geographical regions
+\end{itemize}
+
+\textbf{Mining Strategy:} We implemented sophisticated triplet mining:
+\begin{itemize}
+    \item \textbf{Hard Negative Mining:} Select negatives that are closest to the anchor
+    \item \textbf{Semi-hard Mining:} Choose negatives that are closer than the positive plus margin
+    \item \textbf{Curriculum Learning:} Gradually increase mining difficulty during training
+\end{itemize}
+
+\subsubsection{Training Configuration}
+
+\textbf{Optimization:}
+\begin{itemize}
+    \item Optimizer: Adam with initial learning rate 1e-4
+    \item Learning rate schedule: Cosine annealing with warm restarts
+    \item Weight decay: 1e-5 for regularization
+    \item Gradient clipping: Maximum norm of 1.0
+\end{itemize}
+
+\textbf{Training Protocol:}
+\begin{itemize}
+    \item Total epochs: 100 with early stopping based on validation loss
+    \item Validation frequency: Every 5 epochs
+    \item Model checkpointing: Save best model based on validation metrics
+    \item Mixed precision training: For memory efficiency and speed
+\end{itemize}
+
+\subsection{Data Loading and Augmentation}
+
+\subsubsection{Efficient Data Pipeline}
+
+We designed an efficient data loading pipeline to handle the large dataset:
+
+\textbf{Multi-threaded Loading:} Parallel data loading with 8 worker processes to minimize I/O bottlenecks.
+
+\textbf{Memory Management:} Implemented intelligent caching strategies:
+\begin{itemize}
+    \item LRU cache for frequently accessed tiles
+    \item On-demand tile generation for augmented samples
+    \item Memory mapping for large tile datasets
+\end{itemize}
+
+\textbf{Preprocessing Pipeline:} Real-time preprocessing including:
+\begin{itemize}
+    \item Channel normalization based on dataset statistics
+    \item Invalid data handling (missing channels, corrupted tiles)
+    \item Dynamic triplet generation based on current model state
+\end{itemize}
+
+\subsubsection{Advanced Augmentation}
+
+Beyond basic geometric transformations, we implemented domain-specific augmentations:
+
+\textbf{Geographical Augmentations:}
+\begin{itemize}
+    \item Seasonal variations simulation (changing vegetation coverage)
+    \item Construction simulation (adding/removing buildings)
+    \item Traffic density variations (road usage intensity changes)
+\end{itemize}
+
+\textbf{Noise and Corruption:}
+\begin{itemize}
+    \item GPS noise simulation (small coordinate perturbations)
+    \item Missing data simulation (randomly zeroing channels)
+    \item Sensor noise (Gaussian noise on individual channels)
+\end{itemize}
+
+\subsection{Evaluation Framework}
+
+\subsubsection{Quantitative Metrics}
+
+We established comprehensive evaluation metrics:
+
+\textbf{Embedding Quality Metrics:}
+\begin{itemize}
+    \item \textbf{Silhouette Score:} Measures cluster separation quality
+    \item \textbf{Triplet Accuracy:} Percentage of correctly ordered triplets
+    \item \textbf{Ranking Metrics:} Mean reciprocal rank and recall@k
+\end{itemize}
+
+\textbf{Spatial Coherence Metrics:}
+\begin{itemize}
+    \item \textbf{Geographic Consistency:} Correlation between embedding distance and geographic distance
+    \item \textbf{Neighborhood Preservation:} How well local neighborhoods are maintained in embedding space
+    \item \textbf{Semantic Clustering:} Quality of semantic groupings (residential, commercial, etc.)
+\end{itemize}
+
+\subsubsection{Qualitative Analysis}
+
+\textbf{Visualization Techniques:}
+\begin{itemize}
+    \item t-SNE and UMAP projections for 2D visualization
+    \item Interactive map exploration tools
+    \item Embedding space navigation and similarity search
+\end{itemize}
+
+\textbf{Case Studies:}
+\begin{itemize}
+    \item Specific location analysis (city center, residential areas, parks)
+    \item Cross-district similarity comparisons
+    \item Temporal consistency analysis
+\end{itemize}
+
+\subsection{Implementation Details}
+
+\subsubsection{Technology Stack}
+
+Our implementation leverages modern deep learning frameworks and spatial data tools:
+
+\textbf{Deep Learning:} PyTorch for model implementation with torchvision for pre-trained models
+
+\textbf{Spatial Data:} PostGIS and GDAL for geographic data processing
+
+\textbf{Visualization:} Mapnik for tile generation, Plotly and Folium for interactive visualizations
+
+\textbf{Experimentation:} Weights and Biases for experiment tracking and hyperparameter optimization
+
+\subsubsection{Computational Resources}
+
+Training was conducted on:
+\begin{itemize}
+    \item GPU: NVIDIA RTX 3080 with 10GB VRAM
+    \item CPU: 16-core processor for data preprocessing
+    \item Storage: NVMe SSD for fast data access
+    \item Memory: 32GB RAM for large batch processing
+\end{itemize}
+
+\subsubsection{Reproducibility}
+
+To ensure reproducible results:
+\begin{itemize}
+    \item Fixed random seeds for all stochastic operations
+    \item Comprehensive logging of hyperparameters and configurations
+    \item Version control for data preprocessing scripts
+    \item Containerized environment with Docker for deployment consistency
+\end{itemize}
+
+This comprehensive approach enables systematic evaluation of different architectural choices and training strategies while maintaining scientific rigor and reproducibility.
