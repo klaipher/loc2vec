@@ -1,5 +1,6 @@
 import random
 
+from dash.dcc import f
 import torch
 import torchvision.transforms as T
 from torch import nn
@@ -10,7 +11,7 @@ from loc2vec.dataset import TilesDataset
 from loc2vec.model import Loc2VecModel
 
 
-def train(model, train_loader, optimizer, loss_fn, device, scheduler=None):
+def train(model, train_loader, test_loader, optimizer, loss_fn, device, scheduler=None):
     """
     Train the model for one epoch.
 
@@ -26,11 +27,13 @@ def train(model, train_loader, optimizer, loss_fn, device, scheduler=None):
     """
     model.train()
 
-    loss_each = 2000 # epochs
-    loss_history = []
-    total_loss = 0.0
+    loss_each = 5000 # batches
+    train_loss_history = []
 
+    total_loss = 0.0
     interm_loss = 0.0
+    
+    test_loss_history = []
 
     for batch_idx, batch in tqdm(enumerate(train_loader), desc="Training", total=len(train_loader)):
         anchor = batch["anchor_image"].to(device)
@@ -49,17 +52,19 @@ def train(model, train_loader, optimizer, loss_fn, device, scheduler=None):
         optimizer.step()
 
         total_loss += loss.item()
-
         interm_loss += loss.item()
 
-        if batch_idx % loss_each == 0:
-            # tqdm.write(f"Batch {batch_idx}, Loss: {loss.item():.4f}")
-            # todo: fix loss calculation....
-            loss_history.append(loss.item() / loss_each)
+        if batch_idx % loss_each == 0 and batch_idx > 0:
+            train_loss_history.append(interm_loss / loss_each)
             interm_loss = 0.0
+
+            test_loss = evaluate(model, test_loader, loss_fn, device)
+            test_loss_history.append(test_loss)
+
+            tqdm.write(f"Batch {batch_idx}, Train Loss: {train_loss_history[-1]:.4f}, Test Loss: {test_loss:.4f}")
             
 
-    return total_loss / len(train_loader), loss_history
+    return total_loss / len(train_loader), train_loss_history, test_loss_history
 
 def evaluate(model, val_loader, loss_fn, device):
     """
@@ -77,7 +82,7 @@ def evaluate(model, val_loader, loss_fn, device):
     total_loss = 0.0
 
     with torch.no_grad():
-        for batch in tqdm(val_loader, desc="Evaluating", total=len(val_loader)):
+        for batch in val_loader:
             anchor = batch["anchor_image"].to(device)
             positive = batch["pos_image"].to(device)
             negative = batch["neg_image"].to(device)

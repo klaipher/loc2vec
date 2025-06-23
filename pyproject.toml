@@ -22,6 +22,7 @@ dependencies = [
     "jupyter>=1.1.1",
     "tqdm>=4.67.1",
     "pandas-stubs==2.2.3.250527",
+    "hdbscan>=0.8.40",
 ]
 
 [dependency-groups]

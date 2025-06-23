@@ -1,0 +1,28 @@
+=== EMBEDDING ANALYSIS RESULTS ===
+
+Geographic Coherence:
+  Correlation: 0.0912
+  P-value: 0.0000e+00
+
+Trustworthiness Score: 0.6057
+
+=== DIMENSIONALITY REDUCTION ===
+
+PCA:
+  Total Variance Explained: 0.9563
+
+TSNE:
+
+=== CLUSTERING RESULTS ===
+
+HDBSCAN:
+  Number of clusters: 17
+  Number of noise points: 6847
+  Clustering Metrics:
+    silhouette_score: 0.7349
+    calinski_harabasz_score: 83771.3203
+    davies_bouldin_score: 0.4949
+
+DBSCAN:
+  Number of clusters: 1
+  Number of noise points: 0

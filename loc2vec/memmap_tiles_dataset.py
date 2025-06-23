@@ -6,7 +6,7 @@ from PIL import Image
 import torch
 
 
-class MemmapTilesDataset(Dataset):
+class MemmapTripletTilesDataset(Dataset):
     def __init__(
         self,
         metadata_filename,
@@ -84,27 +84,27 @@ class MemmapTilesDataset(Dataset):
         pos_idx = self._select_positive_sample(x, y, zoom, idx)
         neg_idx = self._select_negative_sample(x, y, zoom, idx)
 
-        anchor_data = np.copy(self.images[idx])
-        pos_data = np.copy(self.images[pos_idx])
-        neg_data = np.copy(self.images[neg_idx])
+        anchor_data = self.images[idx]
+        pos_data = self.images[pos_idx]
+        neg_data = self.images[neg_idx]
 
         # print(f"anchor shape: {anchor_data.shape}, pos shape: {pos_data.shape}, neg shape: {neg_data.shape}")
 
         if self.transform:
             # Convert to tensor first, then apply other transforms
-            anchor_tensor = torch.from_numpy(np.asarray(anchor_data)).float().div_(255.0)
-            pos_tensor = torch.from_numpy(np.asarray(pos_data)).float().div_(255.0)
-            neg_tensor = torch.from_numpy(np.asarray(neg_data)).float().div_(255.0)
+            anchor_tensor = torch.from_numpy(np.asarray(anchor_data).astype(np.float32)).div_(255.0)
+            pos_tensor = torch.from_numpy(np.asarray(pos_data).astype(np.float32)).div_(255.0)
+            neg_tensor = torch.from_numpy(np.asarray(neg_data).astype(np.float32)).div_(255.0)
             
             anchor_tensor = self.transform(anchor_tensor)
             pos_tensor = self.transform(pos_tensor)
             neg_tensor = self.transform(neg_tensor)
         else:
             anchor_tensor = (
-                torch.from_numpy(np.asarray(anchor_data)).float().div_(255.0)
+                torch.from_numpy(np.asarray(anchor_data).astype(np.float32)).div_(255.0)
             )
-            pos_tensor = torch.from_numpy(np.asarray(pos_data)).float().div_(255.0)
-            neg_tensor = torch.from_numpy(np.asarray(neg_data)).float().div_(255.0)
+            pos_tensor = torch.from_numpy(np.asarray(pos_data).astype(np.float32)).div_(255.0)
+            neg_tensor = torch.from_numpy(np.asarray(neg_data).astype(np.float32)).div_(255.0)
 
         return {
             "anchor_image": anchor_tensor,

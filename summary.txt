@@ -1,0 +1,172 @@
+############ 2 Epochs ###################
+
+=== EMBEDDING ANALYSIS RESULTS ===
+
+Geographic Coherence:
+  Correlation: 0.0819
+  P-value: 0.0000e+00
+
+Trustworthiness Score: 0.5983
+
+=== DIMENSIONALITY REDUCTION ===
+
+PCA:
+  Total Variance Explained: 0.9564
+
+MDS:
+  Stress: 45696.7634
+
+TSNE:
+
+=== CLUSTERING RESULTS ===
+
+HDBSCAN:
+  Number of clusters: 15
+  Number of noise points: 5573
+  Clustering Metrics:
+    silhouette_score: 0.6490
+    calinski_harabasz_score: 209874.4219
+    davies_bouldin_score: 0.5101
+
+DBSCAN:
+  Number of clusters: 1
+  Number of noise points: 0
+
+
+######### 1 Epochs ##################
+
+
+
+=== EMBEDDING ANALYSIS RESULTS ===
+
+Geographic Coherence:
+  Correlation: 0.0752
+  P-value: 0.0000e+00
+
+Trustworthiness Score: 0.5957
+
+=== DIMENSIONALITY REDUCTION ===
+
+PCA:
+  Total Variance Explained: 0.9700
+
+TSNE:
+
+=== CLUSTERING RESULTS ===
+
+HDBSCAN:
+  Number of clusters: 11
+  Number of noise points: 4834
+  Clustering Metrics:
+    silhouette_score: 0.7278
+    calinski_harabasz_score: 35966.4961
+    davies_bouldin_score: 0.5418
+
+DBSCAN:
+  Number of clusters: 1
+  Number of noise points: 0
+
+####### 3 Epochs ###################
+
+
+=== EMBEDDING ANALYSIS RESULTS ===
+
+Geographic Coherence:
+  Correlation: 0.0912
+  P-value: 0.0000e+00
+
+Trustworthiness Score: 0.6057
+
+=== DIMENSIONALITY REDUCTION ===
+
+PCA:
+  Total Variance Explained: 0.9563
+
+TSNE:
+
+=== CLUSTERING RESULTS ===
+
+HDBSCAN:
+  Number of clusters: 17
+  Number of noise points: 6847
+  Clustering Metrics:
+    silhouette_score: 0.7349
+    calinski_harabasz_score: 83771.3203
+    davies_bouldin_score: 0.4949
+
+DBSCAN:
+  Number of clusters: 1
+  Number of noise points: 0
+
+
+
+
+
+
+# Embedding Analysis Results Interpretation
+
+## Overview
+This analysis compares embedding quality between models trained for 1 epoch versus 3 epochs, evaluating their performance across geographic coherence, dimensionality reduction, and clustering tasks.
+
+## Key Findings
+
+### Geographic Coherence
+| Metric | 1 Epoch | 3 Epochs | Change |
+|:-------|:--------|:---------|:-------|
+| Correlation | 0,0752 | 0,0912 | +21,3% |
+| P-value | 0,0000 | 0,0000 | No change |
+
+**Interpretation**: The 3-epoch model shows improved geographic coherence with a 21,3% increase in correlation. Both models achieve statistical significance (p < 0,001), but the additional training enhances the model's ability to capture geographic relationships in the embedding space.
+
+### Trustworthiness Score
+| Model | Score | Interpretation |
+|:------|:------|:--------------|
+| 1 Epoch | 0,5957 | Moderate trustworthiness |
+| 3 Epochs | 0,6057 | Slightly improved (+1,7%) |
+
+**Interpretation**: Both models show moderate trustworthiness in preserving local neighborhood structures. The improvement is modest but indicates better preservation of local relationships with additional training.
+
+### Dimensionality Reduction (PCA)
+| Model | Variance Explained |
+|:------|:------------------|
+| 1 Epoch | 97,00% |
+| 3 Epochs | 95,63% |
+
+**Interpretation**: The 1-epoch model retains slightly more variance after PCA reduction. This could indicate either better information density or potentially some overfitting in the 3-epoch model that creates less compressible representations.
+
+### Clustering Performance
+
+#### HDBSCAN Results
+| Metric | 1 Epoch | 3 Epochs | Change |
+|:-------|:--------|:---------|:-------|
+| Clusters | 11 | 17 | +54,5% |
+| Noise Points | 4 834 | 6 847 | +41,6% |
+| Silhouette Score | 0,7278 | 0,7349 | +1,0% |
+| Calinski-Harabasz | 35 966,5 | 83 771,3 | +132,9% |
+| Davies-Bouldin | 0,5418 | 0,4949 | -8,7% (better) |
+
+**Interpretation**: 
+- The 3-epoch model discovers more distinct clusters (17 vs 11), suggesting better differentiation of data patterns
+- Higher noise points indicate more stringent cluster boundaries
+- All clustering quality metrics improve with 3 epochs:
+  - Silhouette score: Slightly better cluster cohesion and separation
+  - Calinski-Harabasz: Dramatically improved cluster definition
+  - Davies-Bouldin: Better cluster separation (lower is better)
+
+#### DBSCAN Results
+Both models produce only 1 cluster with no noise points, suggesting the parameters may not be optimal for this dataset or that the data has a very dense, uniform structure.
+
+## Conclusions
+
+### Advantages of 3-Epoch Training:
+1. **Better Geographic Understanding**: 21,3% improvement in geographic coherence
+2. **Enhanced Clustering**: More nuanced cluster discovery with better quality metrics
+3. **Improved Local Structure**: Higher trustworthiness score
+
+### Trade-offs:
+1. **Dimensionality**: Slightly less variance retained in PCA (1,4% decrease)
+2. **Complexity**: More clusters and noise points may indicate increased model complexity
+
+### Recommendation:
+The 3-epoch model demonstrates superior performance across most metrics, particularly in geographic coherence and clustering quality. The slight decrease in PCA variance explained is outweighed by the substantial improvements in other areas, suggesting that 3 epochs of training produces more meaningful and well-structured embeddings for this dataset.
+
