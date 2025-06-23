@@ -54,6 +54,7 @@ def train(model, train_loader, optimizer, loss_fn, device, scheduler=None):
 
         if batch_idx % loss_each == 0:
             # tqdm.write(f"Batch {batch_idx}, Loss: {loss.item():.4f}")
+            # todo: fix loss calculation....
             loss_history.append(loss.item() / loss_each)
             interm_loss = 0.0
             
