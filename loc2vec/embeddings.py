@@ -40,6 +40,12 @@ def log_embeddings_to_tensorboard(model, dataloader, device, log_dir='logs/embed
             embeddings = model(anchor_images)
             
             embeddings_list.append(embeddings.cpu())
+
+            # print(anchor_images.shape, embeddings.shape)
+
+            resize = T.Resize((64, 64))
+
+            anchor_images = resize(anchor_images[:, :3, :, :])  # Ensure only RGB channels are used
             
             display_images = torch.stack([denormalize(img) for img in anchor_images.cpu()])
             display_images = torch.clamp(display_images, 0, 1)

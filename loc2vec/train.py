@@ -25,31 +25,70 @@ def train(model, train_loader, optimizer, loss_fn, device, scheduler=None):
         float: Average loss for the epoch
     """
     model.train()
+
+    loss_each = 2000 # epochs
+    loss_history = []
     total_loss = 0.0
 
-    for batch in tqdm(train_loader, desc="Training", total=len(train_loader)):
-        # Move data to the specified device
+    interm_loss = 0.0
+
+    for batch_idx, batch in tqdm(enumerate(train_loader), desc="Training", total=len(train_loader)):
         anchor = batch["anchor_image"].to(device)
         positive = batch["pos_image"].to(device)
         negative = batch["neg_image"].to(device)
 
-        # Forward pass
         anchor_out = model(anchor)
         positive_out = model(positive)
         negative_out = model(negative)
 
-        # Compute loss
         loss = loss_fn(anchor_out, positive_out, negative_out)
 
-        # Backward pass and optimization
         optimizer.zero_grad()
         loss.backward()
-        # torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
         optimizer.step()
 
         total_loss += loss.item()
 
-    return total_loss / len(train_loader)
+        interm_loss += loss.item()
+
+        if batch_idx % loss_each == 0:
+            # tqdm.write(f"Batch {batch_idx}, Loss: {loss.item():.4f}")
+            loss_history.append(loss.item() / loss_each)
+            interm_loss = 0.0
+            
+
+    return total_loss / len(train_loader), loss_history
+
+def evaluate(model, val_loader, loss_fn, device):
+    """
+    Evaluate the model on validation data.
+
+    Args:
+        model (nn.Module): The Pytorch model instance
+        val_loader (DataLoader): DataLoader for validation data
+        device (torch.device): Device to run the evaluation on
+
+    Returns:
+        float: Average loss for the validation set
+    """
+    model.eval()
+    total_loss = 0.0
+
+    with torch.no_grad():
+        for batch in tqdm(val_loader, desc="Evaluating", total=len(val_loader)):
+            anchor = batch["anchor_image"].to(device)
+            positive = batch["pos_image"].to(device)
+            negative = batch["neg_image"].to(device)
+
+            anchor_out = model(anchor)
+            positive_out = model(positive)
+            negative_out = model(negative)
+
+            loss = loss_fn(anchor_out, positive_out, negative_out)
+            total_loss += loss.item()
+
+    return total_loss / len(val_loader)
 
 
 if __name__ == "__main__":
