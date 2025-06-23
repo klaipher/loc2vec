@@ -1,0 +1,34 @@
+Location-based services have become ubiquitous in modern mobile applications, from navigation systems to location-aware recommendations. However, accurately determining a user's specific venue from noisy GPS coordinates remains a challenging problem, particularly in dense urban environments where multiple venues may be clustered within the uncertainty radius of smartphone location measurements.
+
+The venue mapping problem -- determining which specific venue a user is visiting given an approximate location coordinate -- is crucial for various applications including behavioral analytics, location-based advertising, and urban planning. Traditional approaches often rely on simple distance-based heuristics or basic geographic queries, but these methods fail to capture the semantic relationships and spatial context that humans intuitively use when reasoning about locations.
+
+\subsection{Motivation}
+
+The Loc2Vec approach, introduced by Sentiance \cite{sentiance2018}, addresses this challenge by learning distributed representations of geographical locations that encode semantic similarities and spatial relationships. Similar to how Word2Vec revolutionized natural language processing by mapping words to meaningful vector spaces, Loc2Vec maps geographical locations to embedding spaces where semantically similar areas are positioned close together.
+
+Consider a scenario where a user's GPS signal places them near both a beach and a lifeguard station. Human intuition would strongly favor the beach as the more likely destination given the broader geographical context. Loc2Vec aims to replicate this intuitive reasoning by training neural networks to understand geographical semantics through self-supervised learning on map data.
+
+\subsection{Project Objectives}
+
+Our project aims to:
+
+\begin{enumerate}
+    \item \textbf{Reimplement the Loc2Vec methodology} for Kyiv city, adapting the original approach to Ukrainian geographical data and urban characteristics
+    \item \textbf{Evaluate transfer learning approaches} by investigating how pre-trained CNN architectures (EfficientNet, ResNet, MobileNetv3) perform as backbone encoders for location embedding
+    \item \textbf{Analyze computational trade-offs} between different architectures in terms of accuracy, training time, and model size
+    \item \textbf{Provide insights} into geographical representation learning for Eastern European urban environments
+\end{enumerate}
+
+\subsection{Kyiv as a Case Study}
+
+Kyiv presents an interesting case study for location embedding due to its unique urban characteristics:
+\begin{itemize}
+    \item \textbf{Historical urban planning}: Mixture of Soviet-era urban design and modern development
+    \item \textbf{Geographical diversity}: River landscape with varied topography
+    \item \textbf{Cultural significance}: Rich historical sites interspersed with commercial areas
+    \item \textbf{Data availability}: Comprehensive OpenStreetMap coverage for Ukraine
+\end{itemize}
+
+\subsection{Report Structure}
+
+This report is organized as follows: Section 2 reviews related work in location embedding and venue mapping. Section 3 describes our methodology and adaptations of the original Loc2Vec approach. Section 4 details our implementation including data processing and model architecture. Section 5 presents experimental results for our base implementation. Section 6 analyzes our transfer learning experiments with different CNN architectures. Section 7 discusses findings and limitations, and Section 8 concludes with future work directions.

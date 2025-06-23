@@ -1,0 +1,120 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{subfigure}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Page layout
+\geometry{margin=1in}
+
+% Code listing style
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+% Title page information
+\title{\textbf{Loc2Vec: Learning Location Embeddings with Triplet-Loss Networks}\\
+\large Implementation and Transfer Learning Analysis for Kyiv City}
+
+\author{
+    Student 1\\
+    \texttt{email1@ucu.edu.ua}
+    \and
+    Student 2\\
+    \texttt{email2@ucu.edu.ua}
+    \and
+    Student 3\\
+    \texttt{email3@ucu.edu.ua}
+}
+
+\date{
+    Machine Learning Course\\
+    Ukrainian Catholic University\\
+    \today
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\input{sections/abstract}
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+\input{sections/introduction}
+
+\section{Related Work and Background}
+\input{sections/related_work}
+
+\section{Methodology}
+\input{sections/methodology}
+
+\section{Implementation Details}
+\input{sections/implementation}
+
+\section{Experiments and Results}
+\input{sections/experiments}
+
+\section{Transfer Learning Analysis}
+\input{sections/transfer_learning}
+
+\section{Discussion}
+\input{sections/discussion}
+
+\section{Conclusion and Future Work}
+\input{sections/conclusion}
+
+\section{Individual Contributions}
+\input{sections/contributions}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\appendix
+\section{Code Snippets}
+\input{sections/appendix_code}
+
+\section{Additional Results}
+\input{sections/appendix_results}
+
+\end{document}

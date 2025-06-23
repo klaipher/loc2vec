@@ -1,0 +1,76 @@
+\subsection{Location Embeddings and Spatial Representation Learning}
+
+The concept of learning distributed representations for geographical locations has emerged as a powerful approach for various location-based tasks. Early work in this area focused on matrix factorization techniques and collaborative filtering approaches adapted for spatial data \cite{zheng2010collaborative}.
+
+The introduction of Word2Vec \cite{mikolov2013word2vec} and its success in natural language processing inspired researchers to develop similar approaches for geographical data. Several variants have been proposed:
+
+\begin{itemize}
+    \item \textbf{Place2Vec} \cite{yan2017place2vec}: Learns place embeddings by treating location sequences as sentences in NLP
+    \item \textbf{Location2Vec} \cite{liu2017location2vec}: Uses check-in sequences to learn venue embeddings
+    \item \textbf{Geography2Vec} \cite{zhang2018geography2vec}: Incorporates geographical constraints into embedding learning
+\end{itemize}
+
+\subsection{Venue Mapping and Point-of-Interest Prediction}
+
+Venue mapping represents a specific application of location intelligence where the goal is to determine the most likely venue a user is visiting given noisy location measurements. Traditional approaches include:
+
+\textbf{Distance-based methods}: Simple nearest neighbor approaches that select the closest venue to a GPS coordinate. While computationally efficient, these methods fail in dense urban areas with multiple nearby venues.
+
+\textbf{Probabilistic approaches}: Methods that model location uncertainty and venue popularity using probabilistic frameworks \cite{krumm2008predicting}. These approaches often incorporate temporal patterns and user behavior models.
+
+\textbf{Machine learning approaches}: Feature-based methods that use various location characteristics (distance, venue type, temporal patterns) as input to traditional ML algorithms \cite{lian2014geomf}.
+
+\subsection{Triplet Loss and Metric Learning}
+
+The triplet loss function, originally proposed for face recognition \cite{schroff2015facenet}, has become a fundamental technique for learning embedding spaces where similarity relationships are preserved. The key idea is to train networks using triplets of examples: an anchor, a positive (similar) example, and a negative (dissimilar) example.
+
+The triplet loss is defined as:
+\begin{equation}
+L = \max(0, \|f(x_a) - f(x_p)\|^2 - \|f(x_a) - f(x_n)\|^2 + \alpha)
+\end{equation}
+
+where $f(\cdot)$ is the embedding function, $x_a$, $x_p$, $x_n$ are anchor, positive, and negative examples respectively, and $\alpha$ is the margin parameter.
+
+Applications of triplet loss in spatial domains include:
+\begin{itemize}
+    \item Image retrieval for location recognition \cite{arandjelovic2016netvlad}
+    \item Satellite image analysis \cite{hu2018deep}
+    \item Urban planning and land use classification \cite{jean2016combining}
+\end{itemize}
+
+\subsection{Transfer Learning in Computer Vision}
+
+Transfer learning has revolutionized computer vision by enabling the adaptation of models pre-trained on large datasets (like ImageNet) to specific domains with limited data. Recent architectural advances have led to several families of efficient CNN architectures:
+
+\textbf{EfficientNet} \cite{tan2019efficientnet}: Systematically scales network depth, width, and resolution using compound scaling, achieving state-of-the-art efficiency.
+
+\textbf{ResNet} \cite{he2016resnet}: Introduces residual connections to enable training of very deep networks, addressing the vanishing gradient problem.
+
+\textbf{MobileNetv3} \cite{howard2019mobilenetv3}: Optimized for mobile deployment with depthwise separable convolutions and neural architecture search.
+
+These architectures have been successfully applied to various spatial analysis tasks, though their application to location embedding and venue mapping remains underexplored.
+
+\subsection{OpenStreetMap and Geographical Data Processing}
+
+OpenStreetMap (OSM) \cite{haklay2008openstreetmap} provides a rich, crowdsourced geographical database that has enabled numerous research applications. Key advantages include:
+\begin{itemize}
+    \item Comprehensive global coverage with detailed urban features
+    \item Rich semantic labeling of geographical objects
+    \item Regular updates and community maintenance
+    \item Free access and open license
+\end{itemize}
+
+Tools for processing OSM data include PostGIS for spatial queries, GDAL for data conversion, and various Python libraries (OSMnx, Fiona, Shapely) for programmatic access.
+
+\subsection{Gap Analysis}
+
+While existing work has made significant progress in location embedding and venue mapping, several gaps remain:
+
+\begin{enumerate}
+    \item \textbf{Limited architectural exploration}: Most location embedding approaches use relatively simple CNN architectures without exploring modern efficient architectures
+    \item \textbf{Regional bias}: Many studies focus on well-studied regions (US, Western Europe) with limited exploration of Eastern European urban characteristics
+    \item \textbf{Transfer learning evaluation}: Systematic evaluation of transfer learning approaches for geographical data is lacking
+    \item \textbf{Computational efficiency}: Limited analysis of trade-offs between model accuracy and computational requirements for mobile deployment
+\end{enumerate}
+
+Our work addresses these gaps by providing a comprehensive evaluation of modern CNN architectures for location embedding in the context of Kyiv city, with particular attention to transfer learning and computational efficiency considerations.
