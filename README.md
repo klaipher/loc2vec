@@ -1,89 +1,47 @@
-# Loc2Vec: Learning Deep Representations of Location from OSM Data
+# Loc2Vec: Learning Location Representations from Map Data
 
-A PyTorch implementation of the Loc2Vec approach for learning representations of
-geographical locations from OpenStreetMap (OSM) tile data. This implementation
-is based on the paper "Learning Deep Representations of Location" and uses
-PyTorch 2.6.
+This project helps you teach AI to understand geographic locations by looking at
+map images. Think of it like training a computer to recognize whether two places
+look similar - like both being cities, forests, or residential areas.
 
-## Overview
+## What does this do?
 
-Loc2Vec is a deep learning model that learns to encode OSM map tile patches into
-a vector space where similar locations have similar representations. This allows
-for tasks like:
+Loc2Vec takes satellite map images from OpenStreetMap and converts them into
+numbers that capture what each place "looks like." Once trained, the AI can find
+similar places, group locations by their characteristics, or help with other
+location-based tasks.
 
-- Finding similar locations based on their map appearance
-- Clustering locations with similar map characteristics (e.g., urban, rural,
-  forest)
-- Using location embeddings as features for downstream tasks
+For example, it might learn that downtown areas look similar to each other, even
+in different cities, or that forest areas have distinctive patterns.
 
-This implementation uses a two-step workflow: preparing the data by downloading
-tiles from an OSM server, and then training/visualizing using the locally
-prepared data.
+## What you need
 
-## Requirements
+You need Python 3.12 and a computer with good graphics (GPU recommended). The
+project works on Windows, Mac, and Linux.
 
-- uv, [how to install](https://docs.astral.sh/uv/getting-started/installation/)
-- PyTorch 2.6 or higher
-- An accessible OpenStreetMap tile server (e.g., running locally or hosted)
-- CUDA-capable GPU (recommended for faster training) or macOS with MPS support.
+## Getting started
 
-## Prepare the environment
+First, install the Python package manager called `uv`:
 
-Install python:
+```bash
+# Visit https://docs.astral.sh/uv/getting-started/installation/ for instructions
+```
+
+Then set up the project:
 
 ```bash
 uv python install 3.12
-```
-
-Install dependencies:
-
-```bash
 make init
 ```
 
-## Implementation Details
+## How to use it
 
-The implementation consists of several key components:
+The process has two main steps: get the map data, then train the AI.
 
-- **Model**: `src/model.py`: CNN-based architecture that transforms image
-  patches into location embeddings.
-- **OSM Data Handling**: `src/osm_data.py`: Utilities for loading OpenStreetMap
-  tiles from a prepared local cache and creating training triplets.
-- **OSM Data Preparation**: `src/prepare_osm_data.py`: Script to download OSM
-  tiles for a region from a server and create metadata for training.
-- **Training**: `src/train_osm.py`: Triplet loss-based training script using
-  prepared OSM data.
-- **Visualization**: `src/visualize_osm.py`: Tools to visualize embeddings from
-  prepared OSM data using Folium interactive maps.
-- **Main Interface**: `src/main.py`: Command-line interface to access different
-  functionalities.
+### Step 1: Download map images
 
-## Usage Workflow (Two Steps)
-
-This implementation uses tiles fetched from an OpenStreetMap tile server (e.g.,
-one running locally). It involves a preparation step followed by
-training/visualization.
-
-### Step 1: Prepare Data
-
-Download OSM tiles for a specific region (e.g., Kyiv Oblast or Kyiv City) and
-generate metadata. This command connects to your OSM server, downloads tiles
-into the specified output directory (`--output_dir`), and creates a
-`metadata.json` file with sample coordinates.
-
-**Example for Kyiv Oblast (Wider Region):**
-
-```bash
-python -m src.main prepare-osm \
-    --server_ip YOUR_SERVER_IP \
-    --server_port 80 \
-    --min_lat 49.8 --max_lat 51.5 --min_lon 29.2 --max_lon 32.2 \
-    --zoom 17 \
-    --num_samples 20000 \
-    --output_dir ./prepared_osm_data/kyiv_oblast_z17
-```
-
-**Example for Kyiv City (Focused Region):**
+You need to download map tiles from an OpenStreetMap server. This command grabs
+thousands of map images from a specific area:
 
 ```bash
 python -m src.main prepare-osm \
@@ -92,74 +50,81 @@ python -m src.main prepare-osm \
     --min_lat 50.3 --max_lat 50.6 --min_lon 30.3 --max_lon 30.7 \
     --zoom 18 \
     --num_samples 15000 \
-    --output_dir ./prepared_osm_data/kyiv_city_z18
+    --output_dir ./map_data/kyiv
 ```
 
-- Replace `YOUR_SERVER_IP` with the IP address of your OSM tile server.
-- Adjust `--min_lat`, `--max_lat`, `--min_lon`, `--max_lon` to define your
-  desired region.
-- Set `--zoom` to the desired tile zoom level (higher zoom = more detail, more
-  tiles).
-- `--num_samples` defines how many random anchor points to generate within the
-  region.
-- `--output_dir` is where the downloaded tiles (in a `tiles/` subdirectory) and
-  `metadata.json` will be saved.
+Replace `YOUR_SERVER_IP` with your map server's address. The coordinates shown
+here cover Kyiv city - change them to your area of interest.
 
-### Step 2a: Train using Prepared Data
+### Step 2: Train the AI
 
-Train a Loc2Vec model using the pre-downloaded tiles and metadata from the
-preparation step:
+Now train the model using your downloaded map images:
 
 ```bash
 python -m src.main train-osm \
-    --prepared_data_dir ./prepared_osm_data/kyiv_oblast_z17 \
-    --output_dir ./output_osm/kyiv_oblast_z17 \
+    --prepared_data_dir ./map_data/kyiv \
+    --output_dir ./trained_models/kyiv \
     --epochs 50
 ```
 
-- `--prepared_data_dir` points to the directory created in Step 1.
-- Training uses the tiles and coordinates from the specified directory.
-- Optionally provide a separate prepared directory for validation using
-  `--val_data_dir`.
+This teaches the AI to recognize patterns in your map images. It might take a
+while depending on your computer.
 
-### Step 2b: Visualize using Prepared Data
+### Step 3: See the results
 
-Visualize embeddings generated from a model trained on prepared OSM data:
+Create an interactive map showing how the AI groups similar locations:
 
 ```bash
 python -m src.main visualize-osm \
-    --model_path ./output_osm/kyiv_oblast_z17/model_best.pt \
-    --prepared_data_dir ./prepared_osm_data/kyiv_oblast_z17 \
-    --output_dir ./visualizations_osm/kyiv_oblast_z17 \
+    --model_path ./trained_models/kyiv/model_best.pt \
+    --prepared_data_dir ./map_data/kyiv \
+    --output_dir ./results/kyiv \
     --max_samples 500
 ```
 
-- `--model_path` points to the trained model.
-- `--prepared_data_dir` points to the directory created in Step 1 (used to load
-  coordinates and tile paths).
-- `--max_samples` limits how many points are visualized (for performance).
-- This generates an interactive HTML map (`embeddings_map.html`) and a
-  `embeddings.geojson` file in the output directory.
+This creates an HTML file you can open in your browser to explore the results.
 
-## Training Considerations
+## Important notes
 
-- **Data Preparation**: The `prepare-osm` step can take significant time and
-  disk space depending on the region size and zoom level. Run this step once per
-  dataset configuration.
-- **Zoom Level**: Higher zoom levels (e.g., 17-19) provide more detailed map
-  imagery but drastically increase the number of tiles to download and store,
-  and slow down training.
-- **Hyperparameters**: Experiment with `embedding_dim` (32-256),
-  `learning_rate`, `batch_size`, and `epochs` in the `train-osm` command.
-- **Validation**: For robust evaluation, prepare a separate validation dataset
-  (using `prepare-osm` for a different region or subset) and use the
-  `--val_data_dir` argument during training.
+**Storage space**: Map data can take up a lot of disk space (several GB),
+especially for large areas or high zoom levels.
 
-## Hardware Requirements
+**Training time**: Training can take hours or days depending on your computer
+and the amount of data.
 
-- **GPU**: Highly recommended (CUDA or MPS). At least 8GB VRAM for reasonable
-  batch sizes.
-- **RAM**: 16GB+ recommended.
-- **Storage**: Potentially large amounts needed for prepared OSM data (tens or
-  hundreds of GB depending on region size and zoom level). SSD recommended for
-  faster I/O during training.
+**Memory**: You'll need at least 8GB of RAM, preferably 16GB or more.
+
+**Graphics card**: A GPU makes training much faster. The project supports NVIDIA
+CUDA and Apple Metal.
+
+## Project structure
+
+The main code lives in two folders:
+
+**src/**: The main application with commands for downloading data, training, and
+visualization.
+
+**loc2vec/**: Core machine learning components including the neural network
+model and data handling.
+
+## Alternative training method
+
+There's also a Jupyter notebook approach in the `loc2vec/` folder if you prefer
+working with notebooks instead of command-line tools.
+
+## Development and experimentation
+
+We used several additional tools during development:
+
+**Transfer learning experiments**: `loc2vec_kaggle.ipynb` contains comprehensive
+comparisons of different transfer learning approaches (EfficientNet, ResNet,
+MobileNet, etc.) that we ran on Kaggle's free GPUs.
+
+**Model evaluation**: `visualize_embeddings_tensorboard.py` helps you analyze
+trained models by building embeddings and evaluating their quality using various
+metrics and TensorBoard visualization.
+
+## Need help?
+
+Check the `saved_models/` folder for examples of trained models, or look at the
+Jupyter notebooks for interactive examples of how everything works.
