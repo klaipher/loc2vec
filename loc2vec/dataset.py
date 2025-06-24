@@ -1,5 +1,8 @@
+import os
 import random
 from pathlib import Path
+
+import matplotlib.pyplot as plt
 import pandas as pd
 import torchvision.transforms as T
 from PIL import Image
@@ -23,199 +26,97 @@ def list_tiles_to_df(tiles_dir):
     return pd.DataFrame(files, columns=["x", "y", "zoom", "filename"])
 
 
-class OptimizedTilesDataset(Dataset):
-    def __init__(
-        self,
-        tiles_root_dir,
-        pos_radius=1,
-        neg_radius_min=10,
-        transform=None,
-        preload_images=True,
-    ):
+def take_positive(tiles_dir, x, y, zoom, max_attempts=10):
+    """Get a positive sample within radius of the anchor tile."""
+    attempts = 0
+    while attempts < max_attempts:
+        x_shift, y_shift = random.sample([-1, 0, 1], 2)
+        pos_x = int(x) + x_shift
+        pos_y = int(y) + y_shift
+
+        pos_path = os.path.join(tiles_dir, zoom, str(pos_x), f"{pos_y}.png")
+
+        if (
+            os.path.exists(pos_path) and os.path.getsize(pos_path) > 103
+        ):  # Skip empty tiles
+            return pos_path
+
+        attempts += 1
+
+    # If no valid positive found after max attempts, return original tile as fallback
+    return os.path.join(tiles_dir, zoom, str(int(x)), f"{int(y)}.png")
+
+
+class TilesDataset(Dataset):
+    def __init__(self, tiles_root_dir, pos_radius=1, neg_radius_min=10, transform=None):
         self.tiles_root_dir = tiles_root_dir
         self.df = list_tiles_to_df(tiles_root_dir)
         self.pos_radius = pos_radius
         self.neg_radius_min = neg_radius_min
         self.transform = transform
-        self.preload_images = preload_images
-
-        print(f"Found {len(self.df)} valid tiles")
-
-        # Convert coordinates to integers once
-        self.df["x_int"] = self.df["x"].astype(int)
-        self.df["y_int"] = self.df["y"].astype(int)
-
-        # Preload all images if requested
-        if preload_images:
-            print("Preloading all images into memory...")
-            self.images = {}
-            self.positive_candidates = {}
-            self.negative_candidates = {}
-
-            self._preload_images()
-            self._precompute_candidates()
-            print("Preloading complete!")
-        else:
-            self.images = None
-            self._precompute_candidates_lazy()
-
-    def _preload_images(self):
-        """Load all images into memory during initialization."""
-        from tqdm import tqdm
-
-        for idx, row in tqdm(
-            self.df.iterrows(), total=len(self.df), desc="Loading images"
-        ):
-            filename = row["filename"]
-            try:
-                self.images[idx] = load_image(filename)
-            except Exception as e:
-                print(f"Warning: Failed to load {filename}: {e}")
-                # Create a blank image as fallback
-                self.images[idx] = Image.new("RGB", (256, 256), color="black")
-
-    def _precompute_candidates(self):
-        """Precompute positive and negative candidates for each sample."""
-        from tqdm import tqdm
-
-        for idx, row in tqdm(
-            self.df.iterrows(), total=len(self.df), desc="Computing candidates"
-        ):
-            x, y, zoom = row["x_int"], row["y_int"], row["zoom"]
-
-            # Find positive candidates (within pos_radius)
-            pos_mask = (
-                (self.df["zoom"] == zoom)
-                & (abs(self.df["x_int"] - x) <= self.pos_radius)
-                & (abs(self.df["y_int"] - y) <= self.pos_radius)
-                & (self.df.index != idx)  # Don't include self
-            )
-            pos_indices = self.df[pos_mask].index.tolist()
-
-            # If no positive candidates, use self as fallback
-            if not pos_indices:
-                pos_indices = [idx]
-
-            self.positive_candidates[idx] = pos_indices
-
-            # Find negative candidates (outside neg_radius_min)
-            neg_mask = (
-                (self.df["zoom"] == zoom)
-                & (
-                    (abs(self.df["x_int"] - x) > self.neg_radius_min)
-                    | (abs(self.df["y_int"] - y) > self.neg_radius_min)
-                )
-                & (self.df.index != idx)  # Don't include self
-            )
-            neg_indices = self.df[neg_mask].index.tolist()
-
-            # If no suitable negatives, use all others as candidates
-            if not neg_indices:
-                neg_indices = [i for i in self.df.index if i != idx]
-
-            self.negative_candidates[idx] = neg_indices
-
-    def _precompute_candidates_lazy(self):
-        """Lighter version that precomputes candidate indices without loading images."""
-        from tqdm import tqdm
-
-        self.positive_candidates = {}
-        self.negative_candidates = {}
-
-        for idx, row in tqdm(
-            self.df.iterrows(), total=len(self.df), desc="Computing candidates"
-        ):
-            x, y, zoom = row["x_int"], row["y_int"], row["zoom"]
-
-            # Find positive candidates
-            pos_mask = (
-                (self.df["zoom"] == zoom)
-                & (abs(self.df["x_int"] - x) <= self.pos_radius)
-                & (abs(self.df["y_int"] - y) <= self.pos_radius)
-                & (self.df.index != idx)
-            )
-            pos_indices = self.df[pos_mask].index.tolist()
-            if not pos_indices:
-                pos_indices = [idx]
-            self.positive_candidates[idx] = pos_indices
-
-            # Find negative candidates
-            neg_mask = (
-                (self.df["zoom"] == zoom)
-                & (
-                    (abs(self.df["x_int"] - x) > self.neg_radius_min)
-                    | (abs(self.df["y_int"] - y) > self.neg_radius_min)
-                )
-                & (self.df.index != idx)
-            )
-            neg_indices = self.df[neg_mask].index.tolist()
-            if not neg_indices:
-                neg_indices = [i for i in self.df.index if i != idx]
-            self.negative_candidates[idx] = neg_indices
-
-    def _get_image(self, idx):
-        """Get image either from preloaded cache or load on demand."""
-        if self.preload_images:
-            return self.images[idx]
-        else:
-            filename = self.df.iloc[idx]["filename"]
-            try:
-                return load_image(filename)
-            except Exception as e:
-                print(f"Warning: Failed to load {filename}: {e}")
-                return Image.new("RGB", (256, 256), color="black")
 
     def __len__(self):
         return len(self.df)
 
     def __getitem__(self, idx):
-        # Get anchor image
-        anchor_image = self._get_image(idx)
+        row = self.df.iloc[idx]
+        x, y, zoom, filename = row["x"], row["y"], row["zoom"], row["filename"]
 
-        # Get positive sample (random choice from precomputed candidates)
-        pos_idx = random.choice(self.positive_candidates[idx])
-        pos_image = self._get_image(pos_idx)
+        # Load the anchor image
+        image = load_image(filename)
 
-        # Get negative sample (random choice from precomputed candidates)
-        neg_idx = random.choice(self.negative_candidates[idx])
-        neg_image = self._get_image(neg_idx)
+        # Get a positive sample (geographically close)
+        pos_path = take_positive(self.tiles_root_dir, x, y, zoom)
+        pos_image = load_image(pos_path)
+
+        # Get a negative sample (geographically distant)
+        # Filter dataframe to find tiles that are far away
+        try:
+            x_int, y_int = int(x), int(y)
+            neg_candidates = self.df[
+                (
+                    (self.df["zoom"] == zoom)
+                    & (
+                        (abs(self.df["x"].astype(int) - x_int) > self.neg_radius_min)
+                        | (abs(self.df["y"].astype(int) - y_int) > self.neg_radius_min)
+                    )
+                )
+            ]
+
+            # If no suitable negative found, just sample randomly from the whole dataset
+            if len(neg_candidates) == 0:
+                neg_candidates = self.df
+
+            # Make sure we don't select the anchor tile as negative
+            neg_candidates = neg_candidates[neg_candidates["filename"] != filename]
+
+            # If still no candidates, use a random tile
+            if len(neg_candidates) == 0:
+                neg_candidates = self.df[self.df["filename"] != filename]
+
+            neg = neg_candidates.sample(1)
+            neg_image = load_image(neg["filename"].values[0])
+        except Exception:
+            # Fallback: use a random sample that's not the anchor
+            fallback_candidates = self.df[self.df["filename"] != filename]
+            neg = fallback_candidates.sample(1)
+            neg_image = load_image(neg["filename"].values[0])
 
         # Apply transforms if specified
         if self.transform:
-            anchor_image = self.transform(anchor_image)
+            image = self.transform(image)
             pos_image = self.transform(pos_image)
             neg_image = self.transform(neg_image)
 
-        # Get metadata
-        row = self.df.iloc[idx]
-
         return {
-            "anchor_image": anchor_image,
+            "anchor_image": image,
             "pos_image": pos_image,
             "neg_image": neg_image,
-            "x": row["x"],
-            "y": row["y"],
-            "zoom": row["zoom"],
-            "filename": row["filename"],
+            "x": x,
+            "y": y,
+            "zoom": zoom,
+            "filename": filename,
         }
-
-
-# Backward compatibility - use optimized version by default
-class TilesDataset(OptimizedTilesDataset):
-    def __init__(self, tiles_root_dir, pos_radius=1, neg_radius_min=10, transform=None):
-        # Default to preloading images for maximum performance
-        super().__init__(
-            tiles_root_dir, pos_radius, neg_radius_min, transform, preload_images=True
-        )
-
-
-# Memory-efficient version for very large datasets
-class LazyTilesDataset(OptimizedTilesDataset):
-    def __init__(self, tiles_root_dir, pos_radius=1, neg_radius_min=10, transform=None):
-        # Don't preload images, but still precompute candidates
-        super().__init__(
-            tiles_root_dir, pos_radius, neg_radius_min, transform, preload_images=False
-        )
 
 
 if __name__ == "__main__":
