@@ -268,3 +268,4 @@ docker/data
 *.pbf
 
 logs/
+tiles/
